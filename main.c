@@ -157,10 +157,38 @@ void excluirContato(int id) {
 
 int main() {
     inicializarBancoDados();
-    inserirContato(pedirNovoContato());
-    lerContatos();
-    buscarPorId(3);
-    // excluirContato(3);
-    salvarContatos();
+    
+    int option;
+    int id;
+    printf("O que deseja fazer?\n");
+    printf("1 - Inserir contato.\n");
+    printf("2 - Buscar por Id\n");
+    printf("3 - Excluir contato por Id\n");
+    printf("4 - Para listar todos os usuários\n");
+    printf("0 - Para sair.\n");
+    scanf("%d", &option);
+    switch (option)
+    {
+    case 1:
+        inserirContato(pedirNovoContato());
+        break;
+    case 2:    
+        
+        printf("Digite o ID a ser alterado");        
+        scanf("%d", &id);
+        buscarPorId(id);
+        break;
+    case 3:
+        printf("Digite o ID a ser removido: ");
+        scanf("%d", &id);
+        excluirContato(id);
+        break;
+    case 4:        
+        lerContatos();
+        break;    
+    default:
+        break;
+    }  
+    salvarContatos(); 
     return 0;
 }
