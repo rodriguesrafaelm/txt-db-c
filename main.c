@@ -157,10 +157,10 @@ void excluirContato(int id) {
 
 int main() {
     inicializarBancoDados();
-    // inserirContato(pedirNovoContato());
-    salvarContatos();
+    inserirContato(pedirNovoContato());
     lerContatos();
     buscarPorId(3);
-    
+    excluirContato();
+    salvarContatos();
     return 0;
 }
