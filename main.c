@@ -160,7 +160,7 @@ int main() {
     inserirContato(pedirNovoContato());
     lerContatos();
     buscarPorId(3);
-    excluirContato();
+    // excluirContato(3);
     salvarContatos();
     return 0;
 }
