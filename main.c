@@ -24,11 +24,16 @@ int inicializarBancoDados() {
     }
 
     numeroContatosRegistrados = 0;
-    Contato contato;
 
-    while (fscanf(arquivo, "%d,%[^,],%[^,],%d,%s\n", &contato.id, contato.nome, contato.email, &contato.idade, contato.telefone) == 5) {
-        bancoDeDados[numeroContatosRegistrados] = contato;
+    while (fscanf(arquivo, "%d,%[^,],%[^,],%d,%s\n", &bancoDeDados[numeroContatosRegistrados].id,
+                                                bancoDeDados[numeroContatosRegistrados].nome,
+                                                bancoDeDados[numeroContatosRegistrados].email,
+                                                &bancoDeDados[numeroContatosRegistrados].idade,
+                                                bancoDeDados[numeroContatosRegistrados].telefone) == 5) {
         numeroContatosRegistrados++;
+        if (numeroContatosRegistrados == MAX_REGISTROS) {
+            break;
+        }
     }
 
     printf("Atualmente, o banco de dados possui %d contatos.\n", numeroContatosRegistrados);
@@ -87,7 +92,7 @@ int lerContatos() {
 
     Contato contato;
     //Ler dados separados por virgula
-    while (fscanf(arquivo, "%d,%[^,],%[^,],%d,%s\n", contato.id, contato.nome, contato.email, &contato.idade, contato.telefone) == 4) {
+    while (fscanf(arquivo, "%d,%[^,],%[^,],%d,%s\n", &contato.id, contato.nome, contato.email, &contato.idade, contato.telefone) == 5) {
         printf("Nome: %s Email: %s Telefone: %s Idade: %d\n", contato.nome, contato.email, contato.telefone, contato.idade);
     }
 
@@ -95,16 +100,67 @@ int lerContatos() {
     return 0;
 }
 
+int buscarPorId(int id) {
+    int indice = -1;
+    for (int i = 0; i < numeroContatosRegistrados; i++) {
+        if(bancoDeDados[i].id == id){
+            Contato contato = bancoDeDados[i];
+            printf("Os dados do contato são:\nNome: %s, Email: %s, Idade: %d, Telefone: %s\n", contato.nome, contato.email, contato.idade, contato.telefone);  
+            return 0;
+        }
+    printf("Nenhum usuário com o id %d foi encontrado.", id);
+    return -1;
+    }
+}
 
+void atualizarContato(int id) {
+    int indice = -1;
+    for (int i = 0; i < numeroContatosRegistrados; i++) {
+        if (bancoDeDados[i].id == id) {
+            indice = i;
+            break;
+        }
+    }
+
+    if (indice == -1) {
+        printf("Contato com o ID %d não encontrado.\n", id);
+        return;
+    }
+
+    Contato novoContato = pedirNovoContato();
+    novoContato.id = id;
+    bancoDeDados[indice] = novoContato;
+    printf("Contato atualizado com sucesso.\n");
+}
+
+void excluirContato(int id) {
+    int indice = -1;
+    for (int i = 0; i < numeroContatosRegistrados; i++) {
+        if (bancoDeDados[i].id == id) {
+            indice = i;
+            break;
+        }
+    }
+
+    if (indice == -1) {
+        printf("Contato com o ID %d não encontrado.\n", id);
+        return;
+    }
+
+    for (int i = indice; i < numeroContatosRegistrados - 1; i++) {
+        bancoDeDados[i] = bancoDeDados[i + 1];
+    }
+
+    numeroContatosRegistrados--;
+    printf("Contato excluído com sucesso.\n");
+}
 
 int main() {
     inicializarBancoDados();
-    inserirContato(pedirNovoContato());
-    // inserirContato(pedirNovoContato());
-    // inserirContato(pedirNovoContato());
     // inserirContato(pedirNovoContato());
     salvarContatos();
     lerContatos();
+    buscarPorId(3);
     
     return 0;
 }
